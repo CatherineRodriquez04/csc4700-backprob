@@ -59,7 +59,7 @@ def sampleImages(mlp_model, test_x, test_y, num_classes=10):
         predicted_label = np.argmax(output)
 
         # Display the image
-        plt.subplot(2, 5, class_id + 1)
+        plt.subplot(3, 4, class_id + 1)
         plt.imshow(sample_image, cmap="gray")
         plt.title(f"True: {true_label}, Pred: {predicted_label}")
         plt.axis('off')
