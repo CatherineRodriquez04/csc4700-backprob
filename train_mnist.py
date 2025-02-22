@@ -10,7 +10,7 @@ from mlp import MultilayerPerceptron, Layer, Relu, Softmax, CrossEntropy
 from mnist_dataloader import MnistDataloader
 
 # Plot Graph
-def plot_loss_curves(training_losses, validation_losses, epochs):
+def plotLoss(training_losses, validation_losses, epochs):
     """Plot the training and validation loss curves."""
     plt.figure(figsize=(10, 6))
     plt.plot(range(1, epochs+1), training_losses, label="Training Loss")
@@ -23,7 +23,7 @@ def plot_loss_curves(training_losses, validation_losses, epochs):
     plt.show()
 
 # Report accuracy
-def report_accuracy(mlp_model, test_x, test_y):
+def accuracy(mlp_model, test_x, test_y):
     """Compute accuracy on the test set."""
     correct = 0
     total = len(test_x)
@@ -43,7 +43,7 @@ def report_accuracy(mlp_model, test_x, test_y):
     print(f"Accuracy on the test set: {accuracy * 100:.2f}%")
 
 # Show samples for each class
-def show_class_samples(mlp_model, test_x, test_y, num_classes=10):
+def sampleImages(mlp_model, test_x, test_y, num_classes=10):
     """Select one sample from each class and show the image with its predicted label."""
     plt.figure(figsize=(15, 10))
     for class_id in range(num_classes):
@@ -117,13 +117,13 @@ def main():
     )
 
     # Plot the loss curves
-    plot_loss_curves(training_losses, validation_losses, epochs)
+    plotLoss(training_losses, validation_losses, epochs)
 
     # Report accuracy on the full test dataset
-    report_accuracy(mlp_model, test_x, test_y)
+    accuracy(mlp_model, test_x, test_y)
 
     # Show one sample from each class and display predicted labels
-    show_class_samples(mlp_model, test_x, test_y)
+    sampleImages(mlp_model, test_x, test_y)
 
 if __name__ == "__main__":
     main()

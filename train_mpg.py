@@ -10,7 +10,7 @@ from mpg_dataloader import dataloader
 from mlp import MultilayerPerceptron, Layer, Relu, SquaredError
 
 # Plot Graph
-def plot_loss_curves(training_losses, validation_losses, epochs):
+def plotLoss(training_losses, validation_losses, epochs):
     """Plot the training and validation loss curves."""
     plt.figure(figsize=(10, 6))
     plt.plot(range(1, epochs+1), training_losses, label="Training Loss")
@@ -23,7 +23,7 @@ def plot_loss_curves(training_losses, validation_losses, epochs):
     plt.show()
 
 # Report testing loss and 10 sample predictions
-def report_testing_loss_and_samples(mlp_model, X_test, y_test, loss_func):
+def reportTesting(mlp_model, X_test, y_test, loss_func):
     """Compute total testing loss and report predictions for 10 random test samples."""
     # Manually forward pass through the model to get predictions
     output = X_test
@@ -90,10 +90,10 @@ def main():
     )
 
     # Plot the loss curves
-    plot_loss_curves(training_losses, validation_losses, epochs)
+    plotLoss(training_losses, validation_losses, epochs)
 
     # Report testing loss and 10 sample predictions
-    report_testing_loss_and_samples(mlp_model, X_test, y_test, loss_function)
+    reportTesting(mlp_model, X_test, y_test, loss_function)
 
 if __name__ == "__main__":
     main()
