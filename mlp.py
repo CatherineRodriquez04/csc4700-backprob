@@ -182,10 +182,6 @@ class Layer:
         :param delta: delta term from layer above
         :return: (weight gradients, bias gradients)
         """
-
-        # print("delta shape:", delta.shape)
-        # print("activation function derivative shape:", self.activation_function.derivative(self.activations).shape)
-
         # for Softmax -> Jacobian
         if isinstance(self.activation_function, Softmax):
             jacobian = self.activation_function.derivative(self.activations)  # Jacobian (batch_size, num_classes, num_classes)

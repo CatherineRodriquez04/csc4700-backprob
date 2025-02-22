@@ -1,11 +1,11 @@
 '''
-Catherine Rodriguez
+Catherine Rodriquez
 Project 1 - CSC 4700
 '''
 
 import numpy as np
-from os.path import join
 import matplotlib.pyplot as plt
+import pandas as pd
 from mpg_dataloader import dataloader
 from mlp import MultilayerPerceptron, Layer, Relu, SquaredError
 
@@ -22,6 +22,42 @@ def plot_loss_curves(training_losses, validation_losses, epochs):
     plt.grid(True)
     plt.show()
 
+# Report testing loss and 10 sample predictions
+def report_testing_loss_and_samples(mlp_model, X_test, y_test, loss_func):
+    """Compute total testing loss and report predictions for 10 random test samples."""
+    # Manually forward pass through the model to get predictions
+    output = X_test
+    for layer in mlp_model.layers:  # Assuming layers attribute exists
+        output = layer.forward(output)
+
+    predictions = output
+
+    # Compute total testing loss using the loss function
+    test_loss = loss_func.loss(predictions, y_test)  # Use loss() instead of compute()
+    print(f"Total testing loss: {test_loss:.4f}")
+
+    # Select 10 random test samples
+    indices = np.random.choice(range(len(X_test)), 10, replace=False)
+    selected_samples = X_test.iloc[indices]  
+    true_mpg = y_test[indices] 
+
+    # Make predictions for the selected samples
+    output_samples = selected_samples
+    for layer in mlp_model.layers:  # Forward pass for selected samples
+        output_samples = layer.forward(output_samples)
+
+    predicted_mpg = output_samples
+
+    # Create a table for the true vs predicted MPG
+    results = pd.DataFrame({
+        'True MPG': true_mpg.flatten(),  
+        'Predicted MPG': predicted_mpg.flatten()
+    })
+
+    print("\n10 Random Test Samples - Predicted vs True MPG:")
+    print(results)
+
+
 def main():
     # Load the data using the dataloader
     X_train, X_val, X_test, y_train, y_val, y_test, y_mean, y_std = dataloader()
@@ -31,11 +67,10 @@ def main():
     y_val = y_val.reshape(-1, 1)
     y_test = y_test.reshape(-1, 1)
 
-
     # Define the MLP architecture
-    layer1 = Layer(fan_in=X_train.shape[1], fan_out=784, activation_function=Relu())
-    layer2 = Layer(fan_in=784, fan_out=128, activation_function=Relu())
-    output_layer = Layer(fan_in=128, fan_out=1, activation_function=None)  # No activation for regression
+    layer1 = Layer(fan_in=X_train.shape[1], fan_out=64, activation_function=Relu())
+    layer2 = Layer(fan_in=64, fan_out=32, activation_function=Relu())
+    output_layer = Layer(fan_in=32, fan_out=1, activation_function=None)  # No activation for regression
 
     loss_function = SquaredError()  # Use squared error for regression
     mlp_model = MultilayerPerceptron(layers=(layer1, layer2, output_layer))
@@ -56,6 +91,9 @@ def main():
 
     # Plot the loss curves
     plot_loss_curves(training_losses, validation_losses, epochs)
+
+    # Report testing loss and 10 sample predictions
+    report_testing_loss_and_samples(mlp_model, X_test, y_test, loss_function)
 
 if __name__ == "__main__":
     main()

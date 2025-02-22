@@ -22,6 +22,51 @@ def plot_loss_curves(training_losses, validation_losses, epochs):
     plt.grid(True)
     plt.show()
 
+# Report accuracy
+def report_accuracy(mlp_model, test_x, test_y):
+    """Compute accuracy on the test set."""
+    correct = 0
+    total = len(test_x)
+    
+    for i in range(total):
+        output = test_x[i]
+        for layer in mlp_model.layers:
+            output = layer.forward(output)
+
+        predicted_label = np.argmax(output)
+        true_label = np.argmax(test_y[i])
+        
+        if predicted_label == true_label:
+            correct += 1
+    
+    accuracy = correct / total
+    print(f"Accuracy on the test set: {accuracy * 100:.2f}%")
+
+# Show samples for each class
+def show_class_samples(mlp_model, test_x, test_y, num_classes=10):
+    """Select one sample from each class and show the image with its predicted label."""
+    plt.figure(figsize=(15, 10))
+    for class_id in range(num_classes):
+        class_indices = np.where(np.argmax(test_y, axis=1) == class_id)[0]  
+        sample_index = np.random.choice(class_indices)  # Randomly select one image from the class
+        sample_image = test_x[sample_index].reshape(28, 28)  # Reshape to 28x28 image
+        true_label = class_id
+
+        output = test_x[sample_index]
+        for layer in mlp_model.layers:
+            output = layer.forward(output)
+
+        predicted_label = np.argmax(output)
+
+        # Display the image
+        plt.subplot(2, 5, class_id + 1)
+        plt.imshow(sample_image, cmap="gray")
+        plt.title(f"True: {true_label}, Pred: {predicted_label}")
+        plt.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
     # File path
     mnist_folder = "mnist"
@@ -73,6 +118,12 @@ def main():
 
     # Plot the loss curves
     plot_loss_curves(training_losses, validation_losses, epochs)
+
+    # Report accuracy on the full test dataset
+    report_accuracy(mlp_model, test_x, test_y)
+
+    # Show one sample from each class and display predicted labels
+    show_class_samples(mlp_model, test_x, test_y)
 
 if __name__ == "__main__":
     main()

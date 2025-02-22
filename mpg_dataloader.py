@@ -25,8 +25,8 @@ def dataloader():
     y = y.values 
 
     # Split the data into training, validation, and testing sets
-    X_train, X_leftover, y_train, y_leftover = train_test_split(X, y, test_size=0.3, random_state=42, shuffle=True)  # 70% training, 30% testing+validation
-    X_val, X_test, y_val, y_test = train_test_split(X_leftover, y_leftover, test_size=0.5, random_state=42, shuffle=True)  # Split the 30% into 50% for validation and 50% for testing
+    X_train, X_leftover, y_train, y_leftover = train_test_split(X, y, test_size=0.3, random_state=42, shuffle=True)  # 70% training, 30% testing & validation
+    X_val, X_test, y_val, y_test = train_test_split(X_leftover, y_leftover, test_size=0.5, random_state=42, shuffle=True)  # Split the 30% into 15% for validation and 15% for testing
 
     # Standardize the data 
     X_mean = X_train.mean(axis=0)
