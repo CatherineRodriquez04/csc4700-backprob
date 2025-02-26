@@ -6,7 +6,7 @@ Project 1 - CSC 4700
 import numpy as np
 from os.path import join
 import matplotlib.pyplot as plt
-from mlp import MultilayerPerceptron, Layer, Relu, Softmax, CrossEntropy
+from mlp import MultilayerPerceptron, Layer, Linear, Relu, Softmax, CrossEntropy
 from mnist_dataloader import MnistDataloader
 
 # Plot Graph
@@ -105,7 +105,7 @@ def main():
     # Set training hyperparameters
     learning_rate = 1e-4
     batch_size = 64
-    epochs = 10
+    epochs = 50
 
     print("Starting training...")
     training_losses, validation_losses = mlp_model.train(

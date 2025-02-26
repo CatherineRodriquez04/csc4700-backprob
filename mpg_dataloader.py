@@ -1,5 +1,5 @@
 '''
-Catherine Rodriguez
+Catherine Rodriquez
 Project 1 - CSC 4700
 '''
 

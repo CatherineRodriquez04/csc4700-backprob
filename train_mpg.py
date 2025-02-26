@@ -23,7 +23,7 @@ def plotLoss(training_losses, validation_losses, epochs):
     plt.show()
 
 # Report testing loss and 10 sample predictions
-def reportTesting(mlp_model, X_test, y_test, loss_func):
+def reportTesting(mlp_model, X_test, y_test, loss_func, y_mean, y_std):
     """Compute total testing loss and report predictions for 10 random test samples."""
     # Manually forward pass through the model to get predictions
     output = X_test
@@ -33,13 +33,13 @@ def reportTesting(mlp_model, X_test, y_test, loss_func):
     predictions = output
 
     # Compute total testing loss using the loss function
-    test_loss = loss_func.loss(predictions, y_test)  # Use loss() instead of compute()
-    print(f"Total testing loss: {test_loss:.4f}")
+    test_loss = loss_func.loss(predictions, y_test)
+    print(f"Total testing loss (MSE): {test_loss:.4f}")
 
     # Select 10 random test samples
     indices = np.random.choice(range(len(X_test)), 10, replace=False)
-    selected_samples = X_test.iloc[indices]  
-    true_mpg = y_test[indices] 
+    selected_samples = X_test.iloc[indices]
+    true_mpg = y_test[indices]
 
     # Make predictions for the selected samples
     output_samples = selected_samples
@@ -48,10 +48,14 @@ def reportTesting(mlp_model, X_test, y_test, loss_func):
 
     predicted_mpg = output_samples
 
+    # Reverse standardization to get original MPG values
+    true_mpg_original = (true_mpg * y_std) + y_mean  # Convert back to original scale
+    predicted_mpg_original = (predicted_mpg * y_std) + y_mean  # Convert back to original scale
+
     # Create a table for the true vs predicted MPG
     results = pd.DataFrame({
-        'True MPG': true_mpg.flatten(),  
-        'Predicted MPG': predicted_mpg.flatten()
+        'True MPG': true_mpg_original.flatten(),
+        'Predicted MPG': predicted_mpg_original.flatten()
     })
 
     print("\n10 Random Test Samples - Predicted vs True MPG:")
@@ -78,7 +82,7 @@ def main():
     # Set training hyperparameters
     learning_rate = 1e-3
     batch_size = 32
-    epochs = 10
+    epochs = 20
 
     print("Starting training...")
     training_losses, validation_losses = mlp_model.train(
@@ -93,7 +97,7 @@ def main():
     plotLoss(training_losses, validation_losses, epochs)
 
     # Report testing loss and 10 sample predictions
-    reportTesting(mlp_model, X_test, y_test, loss_function)
+    reportTesting(mlp_model, X_test, y_test, loss_function, y_mean, y_std)
 
 if __name__ == "__main__":
     main()
