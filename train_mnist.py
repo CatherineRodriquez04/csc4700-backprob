@@ -96,16 +96,16 @@ def main():
 
     # Define the MLP architecture
     layer1 = Layer(fan_in=784, fan_out=128, activation_function=Relu())
-    layer2 = Layer(fan_in=128, fan_out=64, activation_function=Relu())
+    layer2 = Layer(fan_in=128, fan_out=64, activation_function=Softmax())
     output_layer = Layer(fan_in=64, fan_out=10, activation_function=Softmax())
 
     mlp_model = MultilayerPerceptron(layers=(layer1, layer2, output_layer))
     loss_function = CrossEntropy()  # Use cross-entropy for multi-class classification
 
     # Set training hyperparameters
-    learning_rate = 1e-4
-    batch_size = 64
-    epochs = 50
+    learning_rate = 1e-3
+    batch_size = 32
+    epochs = 10
 
     print("Starting training...")
     training_losses, validation_losses = mlp_model.train(
